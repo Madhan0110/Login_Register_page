@@ -156,23 +156,4 @@ def app():
                 st.success('Account created successfully!')
                 st.markdown('Please Login using your email and password')
                 st.balloons()
-        else:
-            # st.button('Login', on_click=f)          
-            st.button('Login', on_click=f)
-            # if st.button('Forget'):
-            forget()
-            # st.button('Forget',on_click=forget)
-
-            
-            
-    if st.session_state.signout:
-                st.text('Name '+st.session_state.username)
-                st.text('Email id: '+st.session_state.useremail)
-                st.button('Sign out', on_click=t) 
-            
-                
-    
-
-                            
-    def ap():
-        st.write('Posts')
+       
