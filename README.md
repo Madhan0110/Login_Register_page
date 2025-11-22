@@ -2,6 +2,7 @@
 
 This project is a simple web application built using Streamlit, Python, and SQLite that allows users to register and login
 
+# FEATURES
 
 - User registration with username and password
 - Passwords are hashed using SHA-256 for security
