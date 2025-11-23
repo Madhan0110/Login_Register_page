@@ -1,0 +1,55 @@
+import streamlit as st
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
+
+# Load credentials from yaml config file
+with open('credentials.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
+
+# Setup authenticator
+authenticator = stauth.Authenticate(
+    config['credentials'],
+    config['cookie']['key'],
+    config['cookie']['name'],
+    config['cookie']['expiry_days'],
+    config['preauthorized']
+)
+
+# Login widget
+name, authentication_status, username = authenticator.login('Login', 'main')
+
+if authentication_status is False:
+    st.error('Username/password is incorrect')
+elif authentication_status is None:
+    st.warning('Please enter your username and password')
+elif authentication_status:
+    st.success(f'Welcome {name}')
+    # Your main app here (protected content)
+    st.write("You are authenticated!")
+    if st.button('Change password'):
+        try:
+            if authenticator.reset_password(username):
+                st.success('Password changed successfully')
+        except Exception as e:
+            st.error(e)
+    st.button("Logout", on_click=authenticator.logout)
+
+# Registration widget
+if st.button("Register"):
+    try:
+        if authenticator.register_user('Register user', preauthorization=False):
+            st.success('User registered successfully')
+    except Exception as e:
+        st.error(e)
+
+# Forgot password widget
+if st.button("Forgot password?"):
+    try:
+        user, email, new_pw = authenticator.forgot_password('Forgot password')
+        if user:
+            st.success('A new password will be sent securely')
+        else:
+            st.error('Username not found')
+    except Exception as e:
+        st.error(e)
